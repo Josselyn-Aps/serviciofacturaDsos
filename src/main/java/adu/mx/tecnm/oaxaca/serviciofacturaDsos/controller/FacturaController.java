@@ -31,8 +31,12 @@ public class FacturaController {
     @PostMapping("/")
     public CustomResponse resgistrarFactura(@RequestBody FacturaModel factura){
         CustomResponse customResponse = new CustomResponse();
-        facturaService.registrarFactura(factura);
+        if(facturaService.getFactura(factura.getFolio())!=null){
+        customResponse.setMensaje("El folio ya se encuentra registrado");
         return customResponse;
+        }else{
+        facturaService.registrarFactura(factura);
+        return customResponse;}
     }
     
     @GetMapping("/")
@@ -53,6 +57,16 @@ public class FacturaController {
     public CustomResponse updateFactura(@RequestBody FacturaModel factura, @PathVariable Integer folio){
         CustomResponse customResponse = new CustomResponse();
         facturaService.updateFactura(factura, folio);
+        return customResponse;
+    }
+    
+    @PutMapping("/estado/{folio}")
+    public CustomResponse updateEstadoFactura(@RequestBody FacturaModel factura,@PathVariable Integer folio){
+        CustomResponse customResponse = new CustomResponse();
+        boolean estado= factura.isEstado();
+        FacturaModel cambio= facturaService.getFactura(folio);
+        cambio.setEstado(estado);
+        facturaService.updateFactura(cambio, folio);
         return customResponse;
     }
     

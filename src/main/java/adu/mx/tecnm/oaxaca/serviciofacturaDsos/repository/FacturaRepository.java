@@ -5,6 +5,7 @@
 package adu.mx.tecnm.oaxaca.serviciofacturaDsos.repository;
 
 import adu.mx.tecnm.oaxaca.serviciofacturaDsos.model.FacturaModel;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 /**
@@ -14,5 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FacturaRepository extends JpaRepository<FacturaModel, Integer>{
    public FacturaModel findByFolio(int folio); 
+   public List findByidCliente(int idCliente); 
 }
 

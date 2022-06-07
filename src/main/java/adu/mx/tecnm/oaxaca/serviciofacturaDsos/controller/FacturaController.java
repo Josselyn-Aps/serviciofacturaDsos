@@ -53,6 +53,13 @@ public class FacturaController {
        return customResponse;
     }
     
+    @GetMapping("/facturas/{idCliente}")
+    public CustomResponse getFacturasCliente(@PathVariable int idCliente){
+       CustomResponse customResponse = new CustomResponse(); 
+       customResponse.setData(facturaService.getFacturasCliente(idCliente));
+       return customResponse;
+    }
+    
     @PutMapping("/{folio}")
     public CustomResponse updateFactura(@RequestBody FacturaModel factura, @PathVariable Integer folio){
         CustomResponse customResponse = new CustomResponse();

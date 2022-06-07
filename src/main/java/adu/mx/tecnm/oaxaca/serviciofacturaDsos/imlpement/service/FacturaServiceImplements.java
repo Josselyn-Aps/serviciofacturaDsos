@@ -47,6 +47,11 @@ private FacturaRepository facturaRepository;
     public FacturaModel getFactura(int folio) {
         return facturaRepository.findByFolio(folio);
     }
+    
+    @Override
+    public List getFacturasCliente(int idCliente) {
+        return facturaRepository.findByidCliente(idCliente);
+    }
 
     @Override
     public void updateFactura(FacturaModel factura, Integer folio) {

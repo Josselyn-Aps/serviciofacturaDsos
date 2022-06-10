@@ -33,7 +33,7 @@ public class FacturaModel {
     private String serie_cerificado_SAT;
     private boolean estado;
     private Integer idPago;
-    private Integer idCliente;
+    private String idCliente;
     
     
     
@@ -150,11 +150,11 @@ public class FacturaModel {
         this.idPago = idPago;
     }
 
-    public Integer getIdCliente() {
+    public String getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(Integer idCliente) {
+    public void setIdCliente(String idCliente) {
         this.idCliente = idCliente;
     }
 }

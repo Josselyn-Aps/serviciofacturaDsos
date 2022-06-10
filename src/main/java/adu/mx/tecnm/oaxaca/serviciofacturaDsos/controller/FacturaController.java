@@ -54,7 +54,7 @@ public class FacturaController {
     }
     
     @GetMapping("/facturas/{idCliente}")
-    public CustomResponse getFacturasCliente(@PathVariable int idCliente){
+    public CustomResponse getFacturasCliente(@PathVariable String idCliente){
        CustomResponse customResponse = new CustomResponse(); 
        customResponse.setData(facturaService.getFacturasCliente(idCliente));
        return customResponse;

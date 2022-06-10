@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FacturaRepository extends JpaRepository<FacturaModel, Integer>{
    public FacturaModel findByFolio(int folio); 
-   public List findByidCliente(int idCliente); 
+   public List findByidCliente(String idCliente); 
 }
 

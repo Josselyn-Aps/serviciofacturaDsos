@@ -49,7 +49,7 @@ private FacturaRepository facturaRepository;
     }
     
     @Override
-    public List getFacturasCliente(int idCliente) {
+    public List getFacturasCliente(String idCliente) {
         return facturaRepository.findByidCliente(idCliente);
     }
 

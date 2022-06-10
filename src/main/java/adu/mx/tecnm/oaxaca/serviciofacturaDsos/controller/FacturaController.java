@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author JOSELYNE
  */
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/factura")

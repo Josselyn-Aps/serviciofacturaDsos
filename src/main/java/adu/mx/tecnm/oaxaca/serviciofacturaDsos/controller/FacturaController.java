@@ -38,7 +38,7 @@ public class FacturaController {
         CustomResponse customResponse = new CustomResponse();
         boolean flag = true;
         
-        if ((factura.getFolio() + "").isEmpty()) {
+        if (factura.getFolio()==null) {
             flag = false;
             customResponse.setMensaje("Falta folio");
         }        

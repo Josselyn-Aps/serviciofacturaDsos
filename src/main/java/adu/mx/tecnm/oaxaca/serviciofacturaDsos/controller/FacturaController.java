@@ -62,7 +62,7 @@ public class FacturaController {
             flag = false;
             customResponse.setMensaje("El id del cliente no es válido");
         }
-        if (flag) {
+        else if (flag) {
             if (facturaService.getFactura(factura.getFolio()) != null) {
                 customResponse.setMensaje("El folio ya se encuentra registrado");
             } 

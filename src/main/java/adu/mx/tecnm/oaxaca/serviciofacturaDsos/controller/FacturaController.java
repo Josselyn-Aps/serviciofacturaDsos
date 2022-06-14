@@ -46,13 +46,21 @@ public class FacturaController {
             flag = false;
             customResponse.setMensaje("Falta folio fiscal");
         }
-        if (factura.getIdPago()==null || factura.getIdPago()==0) {
+        if (factura.getIdPago()==null) {
             flag = false;
             customResponse.setMensaje("Falta id del pago");
         }
-        if (factura.getIdCliente()==null|| factura.getIdCliente()==0) {
+        if(factura.getIdPago()==0){
+            flag = false;
+            customResponse.setMensaje("El id del pago no es válido");
+        }
+        if (factura.getIdCliente()==null) {
             flag = false;
             customResponse.setMensaje("Falta id del cliente");
+        }
+        if(factura.getIdCliente()==0){
+            flag = false;
+            customResponse.setMensaje("El id del cliente no es válido");
         }
         if (flag) {
             if (facturaService.getFactura(factura.getFolio()) != null) {
@@ -72,7 +80,7 @@ public class FacturaController {
                 }
             }
         } else {
-            customResponse.setMensaje("Hay campos vacios");
+            customResponse.setMensaje("Hay campos vacios o incorrectos");
         }
         return customResponse;
         

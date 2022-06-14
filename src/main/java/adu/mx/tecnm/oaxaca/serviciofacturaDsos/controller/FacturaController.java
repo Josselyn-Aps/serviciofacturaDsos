@@ -79,8 +79,6 @@ public class FacturaController {
                     customResponse.setMensaje("El folio fiscal no cumple con el formato solicitado");
                 }
             }
-        } else {
-            customResponse.setMensaje("Hay campos vacios o incorrectos");
         }
         return customResponse;
         

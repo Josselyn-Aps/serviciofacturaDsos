@@ -46,11 +46,11 @@ public class FacturaController {
             flag = false;
             customResponse.setMensaje("Falta folio fiscal");
         }
-        if (factura.getIdPago()==null) {
+        if (factura.getIdPago()==null || factura.getIdPago()==0) {
             flag = false;
             customResponse.setMensaje("Falta id del pago");
         }
-        if (factura.getIdCliente()==null) {
+        if (factura.getIdCliente()==null|| factura.getIdCliente()==0) {
             flag = false;
             customResponse.setMensaje("Falta id del cliente");
         }

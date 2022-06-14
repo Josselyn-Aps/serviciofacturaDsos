@@ -24,9 +24,8 @@ private FacturaRepository facturaRepository;
     @Override
     public void registrarFactura(FacturaModel factura) {
         factura.setEstado(true);
-        factura.setRazon_social_empresa("S.A de C.V");
-        factura.setRazon_social_empresa("S.A de C.V");
-        factura.setDireccion("MIMOSAS ,117,STA. MARIA INSURGENTES,CUAUHTÉMOC,DISTRITO FEDERAL");
+        factura.setRazon_social_empresa("ZAPATERÍA LOS AMIGUITOS");
+        factura.setDireccion("MIMOSAS #117,STA. MARIA INSURGENTES,CUAUHTÉMOC,DISTRITO FEDERAL");
         factura.setCp(06430);
         factura.setCorreo("servicioalcliente@grupobimbo.com");
         factura.setTelefono(1800246860);

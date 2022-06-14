@@ -27,61 +27,89 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/factura")
 public class FacturaController {
-@Autowired
+    
+    @Autowired
     private FacturaService facturaService;
+    
     @PostMapping("/")
-    public CustomResponse resgistrarFactura(@RequestBody FacturaModel factura){
+    public CustomResponse resgistrarFactura(@RequestBody FacturaModel factura) {
         CustomResponse customResponse = new CustomResponse();
-        if(facturaService.getFactura(factura.getFolio())!=null){
-        customResponse.setMensaje("El folio ya se encuentra registrado");
+        boolean flag = true;
+        
+        if ((factura.getFolio() + "").isEmpty()) {
+            flag = false;
+            customResponse.setMensaje("Falta folio");
+        }        
+        if ((factura.getFolio_fiscal() + "").isEmpty()) {
+            flag = false;
+            customResponse.setMensaje("Falta folio fiscal");
+        }
+        if ((factura.getIdPago() + "").isEmpty()) {
+            flag = false;
+            customResponse.setMensaje("Falta id del pago");
+        }
+        if ((factura.getIdCliente() + "").isEmpty()) {
+            flag = false;
+            customResponse.setMensaje("Falta id del cliente");
+        }
+        if (flag) {
+            if (facturaService.getFactura(factura.getFolio()) != null) {
+                customResponse.setMensaje("El folio ya se encuentra registrado");
+            } 
+            if (factura.getFolio_fiscal() != null) {
+                customResponse.setMensaje("El folio fiscal ya se encuentra registrado");
+            } else {
+                facturaService.registrarFactura(factura);
+            }
+        } else {
+            customResponse.setMensaje("Hay campos vacios");
+        }
         return customResponse;
-        }else{
-        facturaService.registrarFactura(factura);
-        return customResponse;}
+        
     }
     
     @GetMapping("/")
-    public CustomResponse getFacturas(){
-       CustomResponse customResponse = new CustomResponse();
-       customResponse.setData(facturaService.getFacturas());
-       return customResponse;
-    }
-    
-    @GetMapping("/{folio}")
-    public CustomResponse getVenta(@PathVariable int folio){
-       CustomResponse customResponse = new CustomResponse(); 
-       customResponse.setData(facturaService.getFactura(folio));
-       return customResponse;
+    public CustomResponse getFacturas() {
+        CustomResponse customResponse = new CustomResponse();
+        customResponse.setData(facturaService.getFacturas());
+        return customResponse;
     }
     
     @GetMapping("/facturas/{idCliente}")
-    public CustomResponse getFacturasCliente(@PathVariable int idCliente){
-       CustomResponse customResponse = new CustomResponse(); 
-       customResponse.setData(facturaService.getFacturasCliente(idCliente));
-       return customResponse;
+    public CustomResponse getFacturasCliente(@PathVariable int idCliente) {
+        CustomResponse customResponse = new CustomResponse();
+        customResponse.setData(facturaService.getFacturasCliente(idCliente));
+        return customResponse;
+    }
+    
+    @GetMapping("/factura")
+    public CustomResponse getFactura(@PathVariable Integer folio) {
+        CustomResponse customResponse = new CustomResponse();
+        customResponse.setData(facturaService.getFactura(folio));
+        return customResponse;
     }
     
     @PutMapping("/{folio}")
-    public CustomResponse updateFactura(@RequestBody FacturaModel factura, @PathVariable Integer folio){
+    public CustomResponse updateFactura(@RequestBody FacturaModel factura, @PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();
         facturaService.updateFactura(factura, folio);
         return customResponse;
     }
     
     @PutMapping("/estado/{folio}")
-    public CustomResponse updateEstadoFactura(@RequestBody FacturaModel factura,@PathVariable Integer folio){
+    public CustomResponse updateEstadoFactura(@RequestBody FacturaModel factura, @PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();
-        boolean estado= factura.isEstado();
-        FacturaModel cambio= facturaService.getFactura(folio);
+        boolean estado = factura.isEstado();
+        FacturaModel cambio = facturaService.getFactura(folio);
         cambio.setEstado(estado);
         facturaService.updateFactura(cambio, folio);
         return customResponse;
     }
     
     @DeleteMapping("/{folio}")
-    public CustomResponse deleteFactura(@PathVariable Integer folio){
+    public CustomResponse deleteFactura(@PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();
         facturaService.deleteFactura(folio);
-         return customResponse;
+        return customResponse;
     }
 }

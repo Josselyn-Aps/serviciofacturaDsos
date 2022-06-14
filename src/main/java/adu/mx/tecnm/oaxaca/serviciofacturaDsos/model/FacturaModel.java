@@ -15,28 +15,47 @@ import javax.persistence.Table;
  * @author JOSELYNE
  */
 @Entity
-@Table(name= "factura")
+@Table(name = "factura")
 public class FacturaModel {
+
     @Id
-@Column
-    private Integer folio ;
-    private String razon_social_empresa ;
+    @Column
+    private Integer folio;
+    private String razonSocialEmpresa;
     private String direccion;
     private Integer cp;
     private String correo;
     private Integer telefono;
     private String rfc;
-    private String regimen_fiscal;
+    private String regimenFiscal;
     private Date fecha;
-    private String folio_fiscal;
-    private String certificado_digital;
-    private String serie_cerificado_SAT;
+    private String folioFiscal;
+    private String certificadoDigital;
+    private String SerieCertificadoSat;
     private boolean estado;
     private Integer idPago;
     private Integer idCliente;
-    
-    
-    
+
+    public FacturaModel(Integer folio, String razonSocialEmpresa, String direccion, Integer cp, String correo, Integer telefono, String rfc, String regimenFiscal, Date fecha, String folioFiscal, String certificadoDigital, String SerieCertificadoSat, boolean estado, Integer idPago, Integer idCliente) {
+        this.folio = folio;
+        this.razonSocialEmpresa = razonSocialEmpresa;
+        this.direccion = direccion;
+        this.cp = cp;
+        this.correo = correo;
+        this.telefono = telefono;
+        this.rfc = rfc;
+        this.regimenFiscal = regimenFiscal;
+        this.fecha = fecha;
+        this.folioFiscal = folioFiscal;
+        this.certificadoDigital = certificadoDigital;
+        this.SerieCertificadoSat = SerieCertificadoSat;
+        this.estado = estado;
+        this.idPago = idPago;
+        this.idCliente = idCliente;
+    }
+
+    public FacturaModel() {
+    }
 
     public Integer getFolio() {
         return folio;
@@ -46,12 +65,12 @@ public class FacturaModel {
         this.folio = folio;
     }
 
-    public String getRazon_social_empresa() {
-        return razon_social_empresa;
+    public String getRazonSocialEmpresa() {
+        return razonSocialEmpresa;
     }
 
-    public void setRazon_social_empresa(String razon_social_empresa) {
-        this.razon_social_empresa = razon_social_empresa;
+    public void setRazonSocialEmpresa(String razonSocialEmpresa) {
+        this.razonSocialEmpresa = razonSocialEmpresa;
     }
 
     public String getDireccion() {
@@ -94,12 +113,12 @@ public class FacturaModel {
         this.rfc = rfc;
     }
 
-    public String getRegimen_fiscal() {
-        return regimen_fiscal;
+    public String getRegimenFiscal() {
+        return regimenFiscal;
     }
 
-    public void setRegimen_fiscal(String regimen_fiscal) {
-        this.regimen_fiscal = regimen_fiscal;
+    public void setRegimenFiscal(String regimenFiscal) {
+        this.regimenFiscal = regimenFiscal;
     }
 
     public Date getFecha() {
@@ -110,28 +129,28 @@ public class FacturaModel {
         this.fecha = fecha;
     }
 
-    public String getFolio_fiscal() {
-        return folio_fiscal;
+    public String getFolioFiscal() {
+        return folioFiscal;
     }
 
-    public void setFolio_fiscal(String folio_fiscal) {
-        this.folio_fiscal = folio_fiscal;
+    public void setFolioFiscal(String folioFiscal) {
+        this.folioFiscal = folioFiscal;
     }
 
-    public String getCertificado_digital() {
-        return certificado_digital;
+    public String getCertificadoDigital() {
+        return certificadoDigital;
     }
 
-    public void setCertificado_digital(String certificado_digital) {
-        this.certificado_digital = certificado_digital;
+    public void setCertificadoDigital(String certificadoDigital) {
+        this.certificadoDigital = certificadoDigital;
     }
 
-    public String getSerie_cerificado_SAT() {
-        return serie_cerificado_SAT;
+    public String getSerieCertificadoSat() {
+        return SerieCertificadoSat;
     }
 
-    public void setSerie_cerificado_SAT(String serie_cerificado_SAT) {
-        this.serie_cerificado_SAT = serie_cerificado_SAT;
+    public void setSerieCertificadoSat(String SerieCertificadoSat) {
+        this.SerieCertificadoSat = SerieCertificadoSat;
     }
 
     public boolean isEstado() {
@@ -157,4 +176,17 @@ public class FacturaModel {
     public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
     }
+
+    @Override
+    public String toString() {
+        return "FacturaModel{" + "folio=" + folio + ", razonSocialEmpresa=" + 
+                razonSocialEmpresa + ", direccion=" + direccion + ", cp=" + cp + 
+                ", correo=" + correo + ", telefono=" + telefono + ", rfc=" + rfc + 
+                ", regimenFiscal=" + regimenFiscal + ", fecha=" + fecha + 
+                ", folioFiscal=" + folioFiscal + ", certificadoDigital=" + 
+                certificadoDigital + ", SerieCertificadoSat=" + 
+                SerieCertificadoSat + ", estado=" + estado + ", idPago=" + 
+                idPago + ", idCliente=" + idCliente + '}';
+    }
+
 }

@@ -24,15 +24,15 @@ private FacturaRepository facturaRepository;
     @Override
     public void registrarFactura(FacturaModel factura) {
         factura.setEstado(true);
-        factura.setRazon_social_empresa("ZAPATERÍA LOS AMIGUITOS");
+        factura.setRazonSocialEmpresa("ZAPATERÍA LOS AMIGUITOS");
         factura.setDireccion("MIMOSAS #117,STA. MARIA INSURGENTES,CUAUHTÉMOC,DISTRITO FEDERAL");
         factura.setCp(06430);
         factura.setCorreo("servicioalcliente@grupobimbo.com");
         factura.setTelefono(1800246860);
         factura.setRfc("BIM-011108-DJ5");
-        factura.setRegimen_fiscal("General");
-        factura.setCertificado_digital("BIM45528");
-        factura.setSerie_cerificado_SAT("SAT45646");
+        factura.setRegimenFiscal("General");
+        factura.setCertificadoDigital("BIM45528");
+        factura.setSerieCertificadoSat("SAT45646");
         factura.setFecha(new Date());
         facturaRepository.save(factura);
     }
@@ -61,6 +61,11 @@ private FacturaRepository facturaRepository;
     @Override
     public void deleteFactura(Integer folio) {
         facturaRepository.deleteById(folio);
+    }
+
+    @Override
+    public FacturaModel getFacturaByFolioFiscal(String folio_fiscal) {
+        return facturaRepository.findByFolioFiscal(folio_fiscal);
     }
     
 }

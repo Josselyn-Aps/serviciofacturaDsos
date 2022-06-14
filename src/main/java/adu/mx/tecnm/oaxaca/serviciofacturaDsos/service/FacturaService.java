@@ -18,6 +18,7 @@ public interface FacturaService {
    public List getFacturas();
    public List getFacturasCliente(int idCliente);
    public FacturaModel getFactura(int folio);
+   public FacturaModel getFacturaByFolioFiscal(String folio_fiscal);
    public void updateFactura(FacturaModel factura, Integer folio);
    public void deleteFactura(Integer folio);
 }

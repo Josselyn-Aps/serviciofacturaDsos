@@ -7,6 +7,8 @@ package adu.mx.tecnm.oaxaca.serviciofacturaDsos.controller;
 import adu.mx.tecnm.oaxaca.serviciofacturaDsos.model.FacturaModel;
 import adu.mx.tecnm.oaxaca.serviciofacturaDsos.service.FacturaService;
 import adu.mx.tecnm.oaxaca.serviciofacturaDsos.utils.CustomResponse;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +42,7 @@ public class FacturaController {
             flag = false;
             customResponse.setMensaje("Falta folio");
         }        
-        if ((factura.getFolio_fiscal() + "").isEmpty()) {
+        if ((factura.getFolioFiscal() + "").isEmpty()) {
             flag = false;
             customResponse.setMensaje("Falta folio fiscal");
         }
@@ -56,10 +58,18 @@ public class FacturaController {
             if (facturaService.getFactura(factura.getFolio()) != null) {
                 customResponse.setMensaje("El folio ya se encuentra registrado");
             } 
-            if (factura.getFolio_fiscal() != null) {
+            if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
                 customResponse.setMensaje("El folio fiscal ya se encuentra registrado");
-            } else {
-                facturaService.registrarFactura(factura);
+            }if(factura.getFolioFiscal().length()!=36){
+                customResponse.setMensaje("El folio fiscal no cumple con el formato solicitado");
+            }if(factura.getFolioFiscal().length()==36){
+                 Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
+                 Matcher mat = pat.matcher(factura.getFolioFiscal());
+                 if (mat.matches()) {
+                    facturaService.registrarFactura(factura);
+                } else {
+                    customResponse.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                }
             }
         } else {
             customResponse.setMensaje("Hay campos vacios");
@@ -75,6 +85,7 @@ public class FacturaController {
         return customResponse;
     }
     
+      
     @GetMapping("/facturas/{idCliente}")
     public CustomResponse getFacturasCliente(@PathVariable int idCliente) {
         CustomResponse customResponse = new CustomResponse();
@@ -82,10 +93,17 @@ public class FacturaController {
         return customResponse;
     }
     
-    @GetMapping("/factura")
+    @GetMapping("/{folio}")
     public CustomResponse getFactura(@PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();
         customResponse.setData(facturaService.getFactura(folio));
+        return customResponse;
+    }
+    
+    @GetMapping("/factura/foliofiscal/{folio_fiscal}")
+    public CustomResponse getFacturaF(@PathVariable String folio_fiscal) {
+        CustomResponse customResponse = new CustomResponse();
+        customResponse.setData(facturaService.getFacturaByFolioFiscal(folio_fiscal));
         return customResponse;
     }
     

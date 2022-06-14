@@ -42,15 +42,15 @@ public class FacturaController {
             flag = false;
             customResponse.setMensaje("Falta folio");
         }        
-        if ((factura.getFolioFiscal() + "").isEmpty()) {
+        if (factura.getFolioFiscal() ==null) {
             flag = false;
             customResponse.setMensaje("Falta folio fiscal");
         }
-        if ((factura.getIdPago() + "").isEmpty()) {
+        if (factura.getIdPago()==null) {
             flag = false;
             customResponse.setMensaje("Falta id del pago");
         }
-        if ((factura.getIdCliente() + "").isEmpty()) {
+        if (factura.getIdCliente()==null) {
             flag = false;
             customResponse.setMensaje("Falta id del cliente");
         }

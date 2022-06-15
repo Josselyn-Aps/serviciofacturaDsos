@@ -24,98 +24,117 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author JOSELYNE
  */
-
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/factura")
 public class FacturaController {
-    
+
     @Autowired
     private FacturaService facturaService;
-    
+
     @PostMapping("/")
     public CustomResponse resgistrarFactura(@RequestBody FacturaModel factura) {
         CustomResponse customResponse = new CustomResponse();
         boolean flag = true;
         
-        if (factura.getFolio()==null) {
+
+        if (factura.getFolio() == null) {
             flag = false;
-            customResponse.setMensaje("Falta folio");
-        }        
-        if (factura.getFolioFiscal()==null) {
+            customResponse.setMensaje("Falta el folio de la factura");
+            return customResponse;
+        }
+
+        
+        if (factura.getFolioFiscal() == null) {
             flag = false;
             customResponse.setMensaje("Falta folio fiscal");
+            return customResponse;
         }
-        if (factura.getIdPago()==null) {
+        if (factura.getIdPago() == null) {
             flag = false;
+            customResponse.setHttpCode(400);
             customResponse.setMensaje("Falta id del pago");
+            return customResponse;
         }
-        if(factura.getIdPago()==0){
+        if (factura.getIdPago() == 0) {
             flag = false;
+            customResponse.setHttpCode(400);
             customResponse.setMensaje("El id del pago no es válido");
+            return customResponse;
         }
-        if (factura.getRfcCliente()==null) {
+        if (factura.getRfcCliente() == null) {
             flag = false;
+            customResponse.setHttpCode(400);
             customResponse.setMensaje("Falta rfc del cliente");
-        }
-        else if (flag) {
+            return customResponse;
+        } else if (flag) {
             if (facturaService.getFactura(factura.getFolio()) != null) {
+                customResponse.setHttpCode(400);
                 customResponse.setMensaje("El folio ya se encuentra registrado");
-            } 
+                return customResponse;
+            }
+
             if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
+                customResponse.setHttpCode(400);
                 customResponse.setMensaje("El folio fiscal ya se encuentra registrado");
-            }if(factura.getFolioFiscal().length()!=36){
+                return customResponse;
+            }
+            if (factura.getFolioFiscal().length() != 36) {
+                customResponse.setHttpCode(422);
                 customResponse.setMensaje("El folio fiscal no cumple con el formato solicitado");
-            }if(factura.getFolioFiscal().length()==36){
-                 Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
-                 Matcher mat = pat.matcher(factura.getFolioFiscal());
-                 if (mat.matches()) {
+                return customResponse;
+            }
+            if (factura.getFolioFiscal().length() == 36) {
+                Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
+                Matcher mat = pat.matcher(factura.getFolioFiscal());
+                if (mat.matches()) {
+                    customResponse.setMensaje("Factura registrada con exito");
                     facturaService.registrarFactura(factura);
                 } else {
                     customResponse.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                    return customResponse;
                 }
             }
         }
         return customResponse;
-        
+
     }
-    
+
     @GetMapping("/")
     public CustomResponse getFacturas() {
         CustomResponse customResponse = new CustomResponse();
         customResponse.setData(facturaService.getFacturas());
         return customResponse;
     }
-    
-      
+
     @GetMapping("/facturas/{rfcCliente}")
     public CustomResponse getFacturasCliente(@PathVariable String rfcCliente) {
         CustomResponse customResponse = new CustomResponse();
         customResponse.setData(facturaService.getFacturasCliente(rfcCliente));
         return customResponse;
     }
-    
+
     @GetMapping("/{folio}")
     public CustomResponse getFactura(@PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();
         customResponse.setData(facturaService.getFactura(folio));
         return customResponse;
     }
-    
+
     @GetMapping("/factura/foliofiscal/{folio_fiscal}")
     public CustomResponse getFacturaF(@PathVariable String folio_fiscal) {
         CustomResponse customResponse = new CustomResponse();
         customResponse.setData(facturaService.getFacturaByFolioFiscal(folio_fiscal));
         return customResponse;
     }
-    
+
     @PutMapping("/{folio}")
     public CustomResponse updateFactura(@RequestBody FacturaModel factura, @PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();
         facturaService.updateFactura(factura, folio);
         return customResponse;
     }
-    
+
     @PutMapping("/estado/{folio}")
     public CustomResponse updateEstadoFactura(@RequestBody FacturaModel factura, @PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();
@@ -125,7 +144,7 @@ public class FacturaController {
         facturaService.updateFactura(cambio, folio);
         return customResponse;
     }
-    
+
     @DeleteMapping("/{folio}")
     public CustomResponse deleteFactura(@PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();

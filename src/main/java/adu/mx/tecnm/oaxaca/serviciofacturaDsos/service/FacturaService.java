@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public interface FacturaService {
    public void registrarFactura(FacturaModel factura); 
    public List getFacturas();
-   public List getFacturasCliente(int idCliente);
+   public List getFacturasCliente(String rfcCliente);
    public FacturaModel getFactura(int folio);
    public FacturaModel getFacturaByFolioFiscal(String folio_fiscal);
    public void updateFactura(FacturaModel factura, Integer folio);

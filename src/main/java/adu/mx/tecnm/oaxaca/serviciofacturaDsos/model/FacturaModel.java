@@ -34,9 +34,9 @@ public class FacturaModel {
     private String SerieCertificadoSat;
     private boolean estado;
     private Integer idPago;
-    private Integer idCliente;
+    private String rfcCliente;
 
-    public FacturaModel(Integer folio, String razonSocialEmpresa, String direccion, Integer cp, String correo, Integer telefono, String rfc, String regimenFiscal, Date fecha, String folioFiscal, String certificadoDigital, String SerieCertificadoSat, boolean estado, Integer idPago, Integer idCliente) {
+    public FacturaModel(Integer folio, String razonSocialEmpresa, String direccion, Integer cp, String correo, Integer telefono, String rfc, String regimenFiscal, Date fecha, String folioFiscal, String certificadoDigital, String SerieCertificadoSat, boolean estado, Integer idPago, String rfcCliente) {
         this.folio = folio;
         this.razonSocialEmpresa = razonSocialEmpresa;
         this.direccion = direccion;
@@ -51,7 +51,7 @@ public class FacturaModel {
         this.SerieCertificadoSat = SerieCertificadoSat;
         this.estado = estado;
         this.idPago = idPago;
-        this.idCliente = idCliente;
+        this.rfcCliente = rfcCliente;
     }
 
     public FacturaModel() {
@@ -169,12 +169,12 @@ public class FacturaModel {
         this.idPago = idPago;
     }
 
-    public Integer getIdCliente() {
-        return idCliente;
+    public String getRfcCliente() {
+        return rfcCliente;
     }
 
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
+    public void setRfcCliente(String rfcCliente) {
+        this.rfcCliente = rfcCliente;
     }
 
     @Override
@@ -186,7 +186,7 @@ public class FacturaModel {
                 ", folioFiscal=" + folioFiscal + ", certificadoDigital=" + 
                 certificadoDigital + ", SerieCertificadoSat=" + 
                 SerieCertificadoSat + ", estado=" + estado + ", idPago=" + 
-                idPago + ", idCliente=" + idCliente + '}';
+                idPago + ", rfcCliente=" + rfcCliente + '}';
     }
 
 }

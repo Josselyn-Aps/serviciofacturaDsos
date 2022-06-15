@@ -54,13 +54,9 @@ public class FacturaController {
             flag = false;
             customResponse.setMensaje("El id del pago no es válido");
         }
-        if (factura.getIdCliente()==null) {
+        if (factura.getRfcCliente()==null) {
             flag = false;
             customResponse.setMensaje("Falta id del cliente");
-        }
-        if(factura.getIdCliente()==0){
-            flag = false;
-            customResponse.setMensaje("El id del cliente no es válido");
         }
         else if (flag) {
             if (facturaService.getFactura(factura.getFolio()) != null) {
@@ -92,10 +88,10 @@ public class FacturaController {
     }
     
       
-    @GetMapping("/facturas/{idCliente}")
-    public CustomResponse getFacturasCliente(@PathVariable int idCliente) {
+    @GetMapping("/facturas/{rfcCliente}")
+    public CustomResponse getFacturasCliente(@PathVariable String rfcCliente) {
         CustomResponse customResponse = new CustomResponse();
-        customResponse.setData(facturaService.getFacturasCliente(idCliente));
+        customResponse.setData(facturaService.getFacturasCliente(rfcCliente));
         return customResponse;
     }
     

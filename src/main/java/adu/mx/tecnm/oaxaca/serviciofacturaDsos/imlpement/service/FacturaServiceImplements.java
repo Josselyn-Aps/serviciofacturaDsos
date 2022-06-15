@@ -47,8 +47,8 @@ private FacturaRepository facturaRepository;
         return facturaRepository.findByFolio(folio);
     }
     
-    //@Override
-    public List getFacturaByRfcCliente(String rfcCliente) {
+    @Override
+    public List getFacturasCliente(String rfcCliente) {
         return facturaRepository.findByRfcCliente(rfcCliente);
     }
 
@@ -67,5 +67,7 @@ private FacturaRepository facturaRepository;
     public FacturaModel getFacturaByFolioFiscal(String folio_fiscal) {
         return facturaRepository.findByFolioFiscal(folio_fiscal);
     }
+
+    
     
 }

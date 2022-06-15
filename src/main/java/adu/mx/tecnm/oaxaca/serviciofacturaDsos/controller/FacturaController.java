@@ -56,7 +56,7 @@ public class FacturaController {
         }
         if (factura.getRfcCliente()==null) {
             flag = false;
-            customResponse.setMensaje("Falta id del cliente");
+            customResponse.setMensaje("Falta rfc del cliente");
         }
         else if (flag) {
             if (facturaService.getFactura(factura.getFolio()) != null) {

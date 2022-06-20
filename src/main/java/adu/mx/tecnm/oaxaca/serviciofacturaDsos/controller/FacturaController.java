@@ -54,8 +54,8 @@ public class FacturaController {
                 responseData.setMensaje("Faltan campos por rellenar");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
-                return valueResponse;
-            }if (factura.getIdPago() == 0) {
+                //return valueResponse;
+            }else if (factura.getIdPago() == 0) {
                 flag = false;
                 responseData.setMensaje("El id del pago no es válido");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);

@@ -48,16 +48,22 @@ public class FacturaController {
         try {
             authentication.auth(request);
             boolean flag = true;
+        if (factura.getFolio()==0.0d) {
             flag = false;
             responseData.setMensaje("Falta el folio de la factura");
             valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
         }
-        if (factura.getFolioFiscal() == null) {
+        if (factura.getFolio()==0) {
+            flag = false;
+            responseData.setMensaje("El folio de la factura es inválido");
+            valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+        }
+        if (factura.getFolioFiscal().isEmpty()) {
             flag = false;
             responseData.setMensaje("Falta folio fiscal");
             valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
         }
-        if (factura.getIdPago() == 0d) {
+        if (factura.getIdPago() == 0.0d) {
             flag = false;
             responseData.setHttpCode(400);
             responseData.setMensaje("Falta id del pago");

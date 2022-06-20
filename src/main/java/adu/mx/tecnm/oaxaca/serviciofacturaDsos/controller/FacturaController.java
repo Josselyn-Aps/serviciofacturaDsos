@@ -87,15 +87,18 @@ public class FacturaController {
                     responseData.setMensaje("El folio fiscal ya se encuentra registrado");
                 }
                 if (factura.getFolioFiscal().length() != 36) {
-                    responseData.setHttpCode(422);
                     responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                    responseData.setHttpCode(422);
+                    valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 }
                 if (factura.getFolioFiscal().length() == 36) {
                     Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
                     Matcher mat = pat.matcher(factura.getFolioFiscal());
                     if (mat.matches()) {
-                        responseData.setMensaje("Factura registrada con exito");
                         facturaService.registrarFactura(factura);
+                        responseData.setMensaje("OK");
+                        responseData.setHttpCode(200);
+                        valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
                     } else {
                         responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
                     }

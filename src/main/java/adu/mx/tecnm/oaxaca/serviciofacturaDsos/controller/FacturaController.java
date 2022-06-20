@@ -48,7 +48,7 @@ public class FacturaController {
         try {
             authentication.auth(request);
             boolean flag = true;
-        if (factura.getFolio().equals(null)) {
+        if (factura.getFolio().equals("")) {
             flag = false;
             responseData.setMensaje("Falta el folio de la factura");
             responseData.setHttpCode(400);

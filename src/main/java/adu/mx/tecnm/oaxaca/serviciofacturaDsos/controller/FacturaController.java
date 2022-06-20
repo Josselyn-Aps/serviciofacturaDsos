@@ -48,7 +48,7 @@ public class FacturaController {
         try {
             authentication.auth(request);
             boolean flag = true;
-        if (factura.getFolio()==0.0d) {
+        if (factura.getFolio()==null) {
             flag = false;
             responseData.setMensaje("Falta el folio de la factura");
             responseData.setHttpCode(400);
@@ -57,11 +57,13 @@ public class FacturaController {
         if (factura.getFolio()==0) {
             flag = false;
             responseData.setMensaje("El folio de la factura es inválido");
+            responseData.setHttpCode(400);
             valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
         }
         if (factura.getFolioFiscal().isEmpty()) {
             flag = false;
             responseData.setMensaje("Falta folio fiscal");
+            responseData.setHttpCode(400);
             valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
         }
         if (factura.getIdPago() == 0.0d) {

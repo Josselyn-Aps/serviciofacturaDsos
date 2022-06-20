@@ -51,26 +51,26 @@ public class FacturaController {
                 responseData.setMensaje("El id del pago no es válido");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(401);
-                return valueResponse;
+                //return valueResponse;
             } 
             else if (factura.getFolio() == null || factura.getFolioFiscal() == null ||factura.getIdPago() == null
                     ||factura.getRfcCliente() == null) {
                 responseData.setMensaje("Faltan campos por rellenar");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
-                return valueResponse;
+                //return valueResponse;
             }else{
                 if (facturaService.getFactura(factura.getFolio()) != null) {
                             responseData.setMensaje("El folio ya se encuentra registrado");
                             valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                             responseData.setHttpCode(400);
-                            return valueResponse;
+                           // return valueResponse;
                 }
                 if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
                     responseData.setMensaje("El folio fiscal ya se encuentra registrado");
                     valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                     responseData.setHttpCode(400);
-                   return valueResponse;
+                //   return valueResponse;
                 }
                 if (factura.getFolioFiscal().length() != 36) {
                     responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
@@ -85,12 +85,12 @@ public class FacturaController {
                         valueResponse = ResponseEntity.status(HttpStatus.CREATED).body(responseData);
                         responseData.setHttpCode(201);
                         responseData.setMensaje("Factura registrada con exito");
-                        return valueResponse;
+                      //  return valueResponse;
                     } else {
                         responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
                         valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                         responseData.setHttpCode(400);
-                        return valueResponse;
+                      //  return valueResponse;
                     }
                 }
             }

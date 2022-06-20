@@ -60,23 +60,28 @@ public class FacturaController {
                         return valueResponse;
                     } else {
                         responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                        valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                        responseData.setHttpCode(400);
                         return valueResponse;
                     }
                 }else {
                     if (facturaService.getFactura(factura.getFolio()) != null) {
                         responseData.setMensaje("El folio ya se encuentra registrado");
-                        //valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                        valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                         responseData.setHttpCode(400);
                         return valueResponse;
                     }
                     if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
-                        responseData.setHttpCode(400);
                         responseData.setMensaje("El folio fiscal ya se encuentra registrado");
+                        valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                        responseData.setHttpCode(400);
                         return valueResponse;
                     }
                     if (factura.getFolioFiscal().length() != 36) {
-                    responseData.setHttpCode(422);
                     responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                    responseData.setHttpCode(422);    
+                    
                     return valueResponse;
                     }
                 }

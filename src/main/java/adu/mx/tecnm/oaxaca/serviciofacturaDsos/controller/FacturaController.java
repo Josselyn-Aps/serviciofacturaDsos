@@ -48,36 +48,16 @@ public class FacturaController {
         try {
             authentication.auth(request);
             boolean flag = true;
-            if (factura.getFolio() == null) {
+            if (factura.getFolio() == null || factura.getFolioFiscal() == null ||factura.getIdPago() == null
+                    ||factura.getRfcCliente() == null) {
                 flag = false;
-                responseData.setMensaje("Falta el folio de la factura");
+                responseData.setMensaje("Faltan campos por rellenar");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
                 return valueResponse;
-            }
-            else if (factura.getFolioFiscal() == null) {
-                flag = false;
-                responseData.setMensaje("Falta folio fiscal");
-                valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                responseData.setHttpCode(400);
-                return valueResponse;
-            }
-            else if (factura.getIdPago() == null) {
-                flag = false;
-                responseData.setMensaje("Falta id del pago");
-                valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                responseData.setHttpCode(400);
-                return valueResponse;
-            }
-            else if (factura.getIdPago() == 0) {
+            }if (factura.getIdPago() == 0) {
                 flag = false;
                 responseData.setMensaje("El id del pago no es válido");
-                valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                responseData.setHttpCode(400);
-                return valueResponse;
-            }else if (factura.getRfcCliente() == null) {
-                flag = false;
-                responseData.setMensaje("Falta rfc del cliente");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
                 return valueResponse;

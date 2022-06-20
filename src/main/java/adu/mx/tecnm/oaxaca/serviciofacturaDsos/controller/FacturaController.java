@@ -53,7 +53,7 @@ public class FacturaController {
                 responseData.setHttpCode(401);
                 //return valueResponse;
             } 
-            else if (factura.getFolio() == null || factura.getFolioFiscal() == null ||factura.getIdPago() == null
+            else if (factura.getFolio() == 0.0d|| factura.getFolioFiscal() == null ||factura.getIdPago() == 0.0d
                     ||factura.getRfcCliente() == null) {
                 responseData.setMensaje("Faltan campos por rellenar");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);

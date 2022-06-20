@@ -47,7 +47,7 @@ public class FacturaController {
         CustomResponse responseData = new CustomResponse();
         try {
             authentication.auth(request);
-            if (factura.getIdPago() == 0) {
+            if (factura.getIdPago() == 0 || factura.getFolio() == 0) {
                 responseData.setMensaje("El id del pago no es válido");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);

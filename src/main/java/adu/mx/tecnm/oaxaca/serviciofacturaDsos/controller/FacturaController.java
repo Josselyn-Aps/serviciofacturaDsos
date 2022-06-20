@@ -42,78 +42,76 @@ public class FacturaController {
     private Authentication authentication;
 
     @PostMapping("/")
-    public ResponseEntity <CustomResponse> resgistrarFactura(@RequestBody FacturaModel factura, HttpServletRequest request) {
-        ResponseEntity<CustomResponse> valueResponse = null;
+    public ResponseEntity resgistrarFactura(@RequestBody FacturaModel factura, HttpServletRequest request) {
+        ResponseEntity valueResponse = null;
         CustomResponse responseData = new CustomResponse();
         try {
             authentication.auth(request);
             boolean flag = true;
-        if (factura.getFolio()==null) {
-            flag = false;
-            responseData.setMensaje("Falta el folio de la factura");
-            responseData.setHttpCode(400);
-            return new ResponseEntity<CustomResponse>(responseData,null,HttpStatus.NO_CONTENT);
-            //valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
-            //return valueResponse;
-        }
-        if (factura.getFolio()==0) {
-            flag = false;
-            responseData.setMensaje("El folio de la factura es inválido");
-            responseData.setHttpCode(400);
-            valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
-        }
-        if (factura.getFolioFiscal().isEmpty()) {
-            flag = false;
-            responseData.setMensaje("Falta folio fiscal");
-            responseData.setHttpCode(400);
-            valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
-        }
-        if (factura.getIdPago() == 0.0d) {
-            flag = false;
-            responseData.setHttpCode(400);
-            responseData.setMensaje("Falta id del pago");
-            valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
-        }
-        if (factura.getIdPago() == 0) {
-            flag = false;
-            responseData.setHttpCode(400);
-            responseData.setMensaje("El id del pago no es válido");
-            valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-        }
-        if (factura.getRfcCliente().isEmpty()) {
-            flag = false;
-            responseData.setHttpCode(400);
-            responseData.setMensaje("Falta rfc del cliente");
-            valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
-        } else if (flag) {
-            if (facturaService.getFactura(factura.getFolio()) != null) {
+            if (factura.getFolio()==null) {
+                flag = false;
+                responseData.setMensaje("Falta el folio de la factura");
                 responseData.setHttpCode(400);
-                responseData.setMensaje("El folio ya se encuentra registrado");
-                valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-            }
-            if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
+                valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+            }/*
+            if (factura.getFolio()==0) {
+                flag = false;
+                responseData.setMensaje("El folio de la factura es inválido");
                 responseData.setHttpCode(400);
-                responseData.setMensaje("El folio fiscal ya se encuentra registrado");
+                valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+            }
+            if (factura.getFolioFiscal().isEmpty()) {
+                flag = false;
+                responseData.setMensaje("Falta folio fiscal");
+                responseData.setHttpCode(400);
+                valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+            }
+            if (factura.getIdPago() == 0.0d) {
+                flag = false;
+                responseData.setHttpCode(400);
+                responseData.setMensaje("Falta id del pago");
+                valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+            }
+            if (factura.getIdPago() == 0) {
+                flag = false;
+                responseData.setHttpCode(400);
+                responseData.setMensaje("El id del pago no es válido");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
             }
-            if (factura.getFolioFiscal().length() != 36) {
-                responseData.setHttpCode(422);
-                responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
-                valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-            }
-            if (factura.getFolioFiscal().length() == 36) {
-                Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
-                Matcher mat = pat.matcher(factura.getFolioFiscal());
-                if (mat.matches()) {
-                    facturaService.registrarFactura(factura);
-                    responseData.setMensaje("OK");
-                    responseData.setHttpCode(200);
-                    valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
-                } else {
-                    responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+            if (factura.getRfcCliente().isEmpty()) {
+                flag = false;
+                responseData.setHttpCode(400);
+                responseData.setMensaje("Falta rfc del cliente");
+                valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+            } else if (flag) {
+                if (facturaService.getFactura(factura.getFolio()) != null) {
+                    responseData.setHttpCode(400);
+                    responseData.setMensaje("El folio ya se encuentra registrado");
+                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 }
-            }
-        }
+                if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
+                    responseData.setHttpCode(400);
+                    responseData.setMensaje("El folio fiscal ya se encuentra registrado");
+                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                }
+                if (factura.getFolioFiscal().length() != 36) {
+                    responseData.setHttpCode(422);
+                    responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                }
+                if (factura.getFolioFiscal().length() == 36) {
+                    Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
+                    Matcher mat = pat.matcher(factura.getFolioFiscal());
+                    if (mat.matches()) {
+                        facturaService.registrarFactura(factura);
+                        responseData.setMensaje("OK");
+                        responseData.setHttpCode(200);
+                        valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
+                    } else {
+                        responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                    }
+                }
+            }*/
         }catch (UnauthorizedException ex) {
                 responseData.setData(ex.toJSON());
                 responseData.setHttpCode(401);

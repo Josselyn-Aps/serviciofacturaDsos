@@ -51,31 +51,31 @@ public class FacturaController {
             if (factura.getFolio() == null) {
                 flag = false;
                 responseData.setMensaje("Falta el folio de la factura");
-                ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
             }
             if (factura.getFolioFiscal() == null) {
                 flag = false;
                 responseData.setMensaje("Falta folio fiscal");
-                ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
             }
             if (factura.getIdPago() == null) {
                 flag = false;
                 responseData.setMensaje("Falta id del pago");
-                ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
             }
             if (factura.getIdPago() == 0) {
                 flag = false;
                 responseData.setMensaje("El id del pago no es válido");
-                ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
             }
             if (factura.getRfcCliente() == null) {
                 flag = false;
                 responseData.setMensaje("Falta rfc del cliente");
-                ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
             } else if (flag) {
                 if (facturaService.getFactura(factura.getFolio()) != null) {

@@ -50,7 +50,7 @@ public class FacturaController {
             if (factura.getIdPago() == 0 || factura.getFolio() == 0) {
                 responseData.setMensaje("El id del pago no es válido");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                responseData.setHttpCode(400);
+                responseData.setHttpCode(401);
                 return valueResponse;
             } 
             else if (factura.getFolio() == null || factura.getFolioFiscal() == null ||factura.getIdPago() == null

@@ -54,7 +54,7 @@ public class FacturaController {
                 valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(422);
             }
-            if (factura.getFolio() == null) {
+            if (factura.getFolio() == 0) {
                 flag = false;
                 responseData.setMensaje("El folio no es válido");
                 valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);

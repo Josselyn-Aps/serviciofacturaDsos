@@ -42,13 +42,13 @@ public class FacturaController {
     private Authentication authentication;
 
     @PostMapping("/")
-    public ResponseEntity resgistrarFactura(@RequestBody FacturaModel factura, HttpServletRequest request) {
+    public ResponseEntity <CustomResponse> resgistrarFactura(@RequestBody FacturaModel factura, HttpServletRequest request) {
         ResponseEntity<CustomResponse> valueResponse = null;
         CustomResponse responseData = new CustomResponse();
         try {
             authentication.auth(request);
             boolean flag = true;
-        if (factura.getFolio()+""=="") {
+        if (factura.getFolio()==null) {
             flag = false;
             responseData.setMensaje("Falta el folio de la factura");
             responseData.setHttpCode(400);

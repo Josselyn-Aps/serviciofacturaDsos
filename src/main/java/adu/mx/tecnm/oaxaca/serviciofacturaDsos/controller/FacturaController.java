@@ -52,7 +52,7 @@ public class FacturaController {
                 flag = false;
                 responseData.setMensaje("Falta el folio de la factura");
                 valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                responseData.setHttpCode(400);
+                responseData.setHttpCode(422);
             }
             if (factura.getFolio() == 0.0d) {
                 flag = false;

@@ -47,18 +47,19 @@ public class FacturaController {
         CustomResponse responseData = new CustomResponse();
         try {
             authentication.auth(request);
+            if (factura.getIdPago() == 0) {
+                responseData.setMensaje("El id del pago no es válido");
+                valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                responseData.setHttpCode(400);
+                return valueResponse;
+            } 
             if (factura.getFolio() == null || factura.getFolioFiscal() == null ||factura.getIdPago() == null
                     ||factura.getRfcCliente() == null) {
                 responseData.setMensaje("Faltan campos por rellenar");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
                 return valueResponse;
-            }if (factura.getIdPago() == 0) {
-                responseData.setMensaje("El id del pago no es válido");
-                valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                responseData.setHttpCode(400);
-                return valueResponse;
-            } else{
+            }else{
                 if (facturaService.getFactura(factura.getFolio()) != null) {
                             responseData.setMensaje("El folio ya se encuentra registrado");
                             valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);

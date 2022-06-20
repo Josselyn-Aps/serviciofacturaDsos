@@ -54,6 +54,12 @@ public class FacturaController {
                 valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
             }
+            if (factura.getFolio() == 0) {
+                flag = false;
+                responseData.setMensaje("El folio no es válido");
+                valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                responseData.setHttpCode(400);
+            }
             if (factura.getFolioFiscal() == null) {
                 flag = false;
                 responseData.setMensaje("Falta folio fiscal");
@@ -72,7 +78,7 @@ public class FacturaController {
                 valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                 responseData.setHttpCode(400);
             }
-            if (factura.getRfcCliente() == null) {
+            if (factura.getRfcCliente() == "") {
                 flag = false;
                 responseData.setMensaje("Falta rfc del cliente");
                 valueResponse =ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);

@@ -4,12 +4,18 @@
  */
 package adu.mx.tecnm.oaxaca.serviciofacturaDsos.controller;
 
+import adu.mx.tecnm.oaxaca.serviciofacturaDsos.authentication.Authentication;
+import adu.mx.tecnm.oaxaca.serviciofacturaDsos.exceptions.ExternalMicroserviceException;
+import adu.mx.tecnm.oaxaca.serviciofacturaDsos.exceptions.UnauthorizedException;
 import adu.mx.tecnm.oaxaca.serviciofacturaDsos.model.FacturaModel;
 import adu.mx.tecnm.oaxaca.serviciofacturaDsos.service.FacturaService;
 import adu.mx.tecnm.oaxaca.serviciofacturaDsos.utils.CustomResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,123 +38,291 @@ public class FacturaController {
     @Autowired
     private FacturaService facturaService;
 
-    @PostMapping("/")
-    public CustomResponse resgistrarFactura(@RequestBody FacturaModel factura) {
-        CustomResponse customResponse = new CustomResponse();
-        boolean flag = true;
-        
+    @Autowired
+    private Authentication authentication;
 
+    @PostMapping("/")
+    public ResponseEntity resgistrarFactura(@RequestBody FacturaModel factura, HttpServletRequest request) {
+        ResponseEntity<CustomResponse> valueResponse = null;
+        CustomResponse responseData = new CustomResponse();
+
+        try {
+            authentication.auth(request);
+            //FacturaModel fact = cargoUtil.procesarCargoTarjeta(cargoParam);
+            //responseData.setData(movimiento);
+            boolean flag = true;
+                if (factura.getFolioFiscal().length() == 36) {
+                    Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
+                    Matcher mat = pat.matcher(factura.getFolioFiscal());
+                    if (mat.matches()) {
+                        facturaService.registrarFactura(factura);
+                        valueResponse = ResponseEntity.status(HttpStatus.CREATED).body(responseData);
+                        responseData.setHttpCode(201);
+                        responseData.setMensaje("Factura registrada con exito");
+                    } else {
+                        responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                        return valueResponse;
+                    }
+                }
+                if (facturaService.getFactura(factura.getFolio()) != null) {
+                    responseData.setMensaje("El folio ya se encuentra registrado");
+                    //valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                    responseData.setHttpCode(400);
+                    return valueResponse;
+                }
+                if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
+                    responseData.setHttpCode(400);
+                    responseData.setMensaje("El folio fiscal ya se encuentra registrado");
+                    return valueResponse;
+                }
+                if (factura.getFolioFiscal().length() != 36) {
+                    responseData.setHttpCode(422);
+                    responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                    return valueResponse;
+                }
+            }catch (NullPointerException e) { 
+            //responseData.setData(ex.toJSON());
+            responseData.setMensaje("Faltan campos por rellenar");
+            valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+            responseData.setHttpCode(401);
+           /* boolean flag = true;
         if (factura.getFolio() == null) {
             flag = false;
-            customResponse.setMensaje("Falta el folio de la factura");
-            return customResponse;
+            responseData.setMensaje("Falta el folio de la factura");
+            valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+            responseData.setHttpCode(400);
+            return valueResponse;
         }
-
-        
         if (factura.getFolioFiscal() == null) {
             flag = false;
-            customResponse.setMensaje("Falta folio fiscal");
-            return customResponse;
+            responseData.setMensaje("Falta folio fiscal");
+            valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+            responseData.setHttpCode(400);
+            return valueResponse;
         }
         if (factura.getIdPago() == null) {
             flag = false;
-            customResponse.setHttpCode(400);
-            customResponse.setMensaje("Falta id del pago");
-            return customResponse;
+            responseData.setMensaje("Falta id del pago");
+            valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+            responseData.setHttpCode(400);
+            return valueResponse;
         }
         if (factura.getIdPago() == 0) {
             flag = false;
-            customResponse.setHttpCode(400);
-            customResponse.setMensaje("El id del pago no es válido");
-            return customResponse;
+            responseData.setMensaje("El id del pago no es válido");
+            valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+            responseData.setHttpCode(400);
+            return valueResponse;
         }
-        if (factura.getRfcCliente() == null) {
-            flag = false;
-            customResponse.setHttpCode(400);
-            customResponse.setMensaje("Falta rfc del cliente");
-            return customResponse;
-        } else if (flag) {
-            if (facturaService.getFactura(factura.getFolio()) != null) {
-                customResponse.setHttpCode(400);
-                customResponse.setMensaje("El folio ya se encuentra registrado");
-                return customResponse;
-            }
+        }*/
+            
+        }catch (UnauthorizedException ex) {
+            responseData.setData(ex.toJSON());
+            responseData.setHttpCode(401);
+            valueResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
+        }catch (ExternalMicroserviceException ex) {
+             responseData.setData(ex.toJSON());
+            responseData.setHttpCode(503);
+            valueResponse = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(responseData);
+        }catch (Exception ex) {
+            responseData.setHttpCode(500);
+            valueResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+            return valueResponse;
+            /*
+        
+        return customResponse;*/
+        }
 
-            if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
-                customResponse.setHttpCode(400);
-                customResponse.setMensaje("El folio fiscal ya se encuentra registrado");
-                return customResponse;
+        @GetMapping("/")
+        public ResponseEntity getFacturas(HttpServletRequest request) {
+        ResponseEntity valueResponse = null;   
+        CustomResponse responseData = new CustomResponse();
+            try{
+                authentication.auth(request);
+                responseData.setData(facturaService.getFacturas());
+                responseData.setMensaje("OK");
+                responseData.setHttpCode(200);
+                valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
+            }catch (UnauthorizedException ex) {
+                responseData.setData(ex.toJSON());
+                responseData.setHttpCode(401);
+                valueResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
+            }catch (ExternalMicroserviceException ex) {
+                responseData.setData(ex.toJSON());
+                responseData.setHttpCode(503);
+                valueResponse = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(responseData);
+            }catch (Exception ex) {
+                responseData.setHttpCode(500);
+                valueResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
-            if (factura.getFolioFiscal().length() != 36) {
-                customResponse.setHttpCode(422);
-                customResponse.setMensaje("El folio fiscal no cumple con el formato solicitado");
-                return customResponse;
+            return valueResponse;
+        }
+
+        @GetMapping("/facturas/{rfcCliente}")
+        public ResponseEntity getFacturasCliente(@PathVariable String rfcCliente,
+                HttpServletRequest request) {
+        ResponseEntity valueResponse = null;   
+        CustomResponse responseData = new CustomResponse();
+            try{
+                authentication.auth(request);
+                responseData.setData(facturaService.getFacturasCliente(rfcCliente));
+                responseData.setMensaje("OK");
+                responseData.setHttpCode(200);
+                valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
+            }catch (UnauthorizedException ex) {
+                responseData.setData(ex.toJSON());
+                responseData.setHttpCode(401);
+                valueResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
+            }catch (ExternalMicroserviceException ex) {
+                responseData.setData(ex.toJSON());
+                responseData.setHttpCode(503);
+                valueResponse = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(responseData);
+            }catch (Exception ex) {
+                responseData.setHttpCode(500);
+                valueResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
-            if (factura.getFolioFiscal().length() == 36) {
-                Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
-                Matcher mat = pat.matcher(factura.getFolioFiscal());
-                if (mat.matches()) {
-                    customResponse.setMensaje("Factura registrada con exito");
-                    facturaService.registrarFactura(factura);
-                } else {
-                    customResponse.setMensaje("El folio fiscal no cumple con el formato solicitado");
-                    return customResponse;
+            return valueResponse;
+            
+        }
+
+        @GetMapping("/{folio}")
+        public ResponseEntity getFactura(@PathVariable Integer folio,HttpServletRequest request) {
+        ResponseEntity valueResponse = null;   
+        CustomResponse responseData = new CustomResponse();
+            try{
+                authentication.auth(request);
+                responseData.setData(facturaService.getFactura(folio));
+                responseData.setMensaje("OK");
+                responseData.setHttpCode(200);
+                valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
+            }catch (UnauthorizedException ex) {
+                responseData.setData(ex.toJSON());
+                responseData.setHttpCode(401);
+                valueResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
+            }catch (ExternalMicroserviceException ex) {
+                responseData.setData(ex.toJSON());
+                responseData.setHttpCode(503);
+                valueResponse = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(responseData);
+            }catch (Exception ex) {
+                responseData.setHttpCode(500);
+                valueResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+            return valueResponse;
+            
+        }
+         
+
+        @GetMapping("/factura/foliofiscal/{folio_fiscal}")
+        public ResponseEntity getFacturaF(@PathVariable String folio_fiscal,HttpServletRequest request) {
+        ResponseEntity valueResponse = null;   
+        CustomResponse responseData = new CustomResponse();
+            try{
+                authentication.auth(request);
+                responseData.setData(facturaService.getFacturaByFolioFiscal(folio_fiscal));
+                responseData.setMensaje("OK");
+                responseData.setHttpCode(200);
+                valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
+            }catch (UnauthorizedException ex) {
+                responseData.setData(ex.toJSON());
+                responseData.setHttpCode(401);
+                valueResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
+            }catch (ExternalMicroserviceException ex) {
+                responseData.setData(ex.toJSON());
+                responseData.setHttpCode(503);
+                valueResponse = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(responseData);
+            }catch (Exception ex) {
+                responseData.setHttpCode(500);
+                valueResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+            return valueResponse;
+            
+        }
+            
+        @PutMapping("/{folio}")
+        public ResponseEntity updateFactura(@RequestBody FacturaModel factura, 
+        @PathVariable Integer folio, HttpServletRequest request) {
+        ResponseEntity valueResponse = null;
+        CustomResponse responseData = new CustomResponse();
+           /* facturaService.updateFactura(factura, folio);
+            return valueResponse;*/
+        try {
+            authentication.auth(request);
+            boolean flag = true;
+                if (factura.getFolioFiscal().length() == 36) {
+                    Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
+                    Matcher mat = pat.matcher(factura.getFolioFiscal());
+                    if (mat.matches()) {
+                        facturaService.registrarFactura(factura);
+                        valueResponse = ResponseEntity.status(HttpStatus.CREATED).body(responseData);
+                        responseData.setHttpCode(201);
+                        responseData.setMensaje("Factura registrada con exito");
+                    } else {
+                        responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                        return valueResponse;
+                    }
                 }
-            }
+                if (facturaService.getFactura(factura.getFolio()) != null) {
+                    responseData.setMensaje("El folio ya se encuentra registrado");
+                    //valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                    responseData.setHttpCode(400);
+                    return valueResponse;
+                }
+                if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
+                    responseData.setHttpCode(400);
+                    responseData.setMensaje("El folio fiscal ya se encuentra registrado");
+                    return valueResponse;
+                }
+                if (factura.getFolioFiscal().length() != 36) {
+                    responseData.setHttpCode(422);
+                    responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                    return valueResponse;
+                }
+            }catch (NullPointerException e) { 
+            //responseData.setData(ex.toJSON());
+            responseData.setMensaje("Faltan campos por rellenar");
+            valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+            responseData.setHttpCode(401);
+            }catch (UnauthorizedException ex) {
+            responseData.setData(ex.toJSON());
+            responseData.setHttpCode(401);
+            valueResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
+        }catch (ExternalMicroserviceException ex) {
+             responseData.setData(ex.toJSON());
+            responseData.setHttpCode(503);
+            valueResponse = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(responseData);
+        }catch (Exception ex) {
+            responseData.setHttpCode(500);
+            valueResponse = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return customResponse;
+            return valueResponse;
+            /*
+        
+        return customResponse;*/
+        
+            
+            
+        }
 
-    }
-
-    @GetMapping("/")
-    public CustomResponse getFacturas() {
+        @PutMapping("/estado/{folio}")
+        public CustomResponse updateEstadoFactura(@RequestBody FacturaModel factura, 
+        @PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();
-        customResponse.setData(facturaService.getFacturas());
-        return customResponse;
-    }
+            boolean estado = factura.isEstado();
+            FacturaModel cambio = facturaService.getFactura(folio);
+            cambio.setEstado(estado);
+            facturaService.updateFactura(cambio, folio);
+            return customResponse;
+        }
 
-    @GetMapping("/facturas/{rfcCliente}")
-    public CustomResponse getFacturasCliente(@PathVariable String rfcCliente) {
+        @DeleteMapping("/{folio}")
+        public CustomResponse deleteFactura
+        (@PathVariable
+        Integer folio
+        
+            ) {
         CustomResponse customResponse = new CustomResponse();
-        customResponse.setData(facturaService.getFacturasCliente(rfcCliente));
-        return customResponse;
+            facturaService.deleteFactura(folio);
+            return customResponse;
+        }
     }
-
-    @GetMapping("/{folio}")
-    public CustomResponse getFactura(@PathVariable Integer folio) {
-        CustomResponse customResponse = new CustomResponse();
-        customResponse.setData(facturaService.getFactura(folio));
-        return customResponse;
-    }
-
-    @GetMapping("/factura/foliofiscal/{folio_fiscal}")
-    public CustomResponse getFacturaF(@PathVariable String folio_fiscal) {
-        CustomResponse customResponse = new CustomResponse();
-        customResponse.setData(facturaService.getFacturaByFolioFiscal(folio_fiscal));
-        return customResponse;
-    }
-
-    @PutMapping("/{folio}")
-    public CustomResponse updateFactura(@RequestBody FacturaModel factura, @PathVariable Integer folio) {
-        CustomResponse customResponse = new CustomResponse();
-        facturaService.updateFactura(factura, folio);
-        return customResponse;
-    }
-
-    @PutMapping("/estado/{folio}")
-    public CustomResponse updateEstadoFactura(@RequestBody FacturaModel factura, @PathVariable Integer folio) {
-        CustomResponse customResponse = new CustomResponse();
-        boolean estado = factura.isEstado();
-        FacturaModel cambio = facturaService.getFactura(folio);
-        cambio.setEstado(estado);
-        facturaService.updateFactura(cambio, folio);
-        return customResponse;
-    }
-
-    @DeleteMapping("/{folio}")
-    public CustomResponse deleteFactura(@PathVariable Integer folio) {
-        CustomResponse customResponse = new CustomResponse();
-        facturaService.deleteFactura(folio);
-        return customResponse;
-    }
-}

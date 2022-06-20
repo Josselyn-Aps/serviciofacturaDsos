@@ -67,7 +67,7 @@ public class FacturaController {
                 responseData.setHttpCode(400);
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
             }
-            if (factura.getIdPago() == 0.0d) {
+            if (factura.getIdPago() == null) {
                 flag = false;
                 responseData.setHttpCode(400);
                 responseData.setMensaje("Falta id del pago");

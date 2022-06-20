@@ -53,6 +53,7 @@ public class FacturaController {
             responseData.setMensaje("Falta el folio de la factura");
             responseData.setHttpCode(400);
             valueResponse = ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseData);
+            return valueResponse;
         }
         if (factura.getFolio()==0) {
             flag = false;

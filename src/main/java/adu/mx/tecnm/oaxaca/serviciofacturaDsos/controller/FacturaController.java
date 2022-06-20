@@ -48,8 +48,6 @@ public class FacturaController {
 
         try {
             authentication.auth(request);
-            //FacturaModel fact = cargoUtil.procesarCargoTarjeta(cargoParam);
-            //responseData.setData(movimiento);
             boolean flag = true;
                 if (factura.getFolioFiscal().length() == 36) {
                     Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");
@@ -59,23 +57,24 @@ public class FacturaController {
                         valueResponse = ResponseEntity.status(HttpStatus.CREATED).body(responseData);
                         responseData.setHttpCode(201);
                         responseData.setMensaje("Factura registrada con exito");
+                        return valueResponse;
                     } else {
                         responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
                         return valueResponse;
                     }
                 }
-                if (facturaService.getFactura(factura.getFolio()) != null) {
+                else if (facturaService.getFactura(factura.getFolio()) != null) {
                     responseData.setMensaje("El folio ya se encuentra registrado");
                     //valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                     responseData.setHttpCode(400);
                     return valueResponse;
                 }
-                if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
+                else if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
                     responseData.setHttpCode(400);
                     responseData.setMensaje("El folio fiscal ya se encuentra registrado");
                     return valueResponse;
                 }
-                if (factura.getFolioFiscal().length() != 36) {
+                else if (factura.getFolioFiscal().length() != 36) {
                     responseData.setHttpCode(422);
                     responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
                     return valueResponse;

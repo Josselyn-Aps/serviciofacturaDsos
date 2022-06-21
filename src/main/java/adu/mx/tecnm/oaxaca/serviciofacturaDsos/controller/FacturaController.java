@@ -164,10 +164,16 @@ public class FacturaController {
         CustomResponse responseData = new CustomResponse();
             try{
                 authentication.auth(request);
+                if (facturaService.getFacturasCliente(rfcCliente) == null) {
+                valueResponse = ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+                responseData.setMensaje("No hay clientes con este rfc:= " + rfcCliente);
+                responseData.setHttpCode(422);
+            }else{
                 responseData.setData(facturaService.getFacturasCliente(rfcCliente));
                 responseData.setMensaje("OK");
                 responseData.setHttpCode(200);
                 valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
+                }
             }catch (UnauthorizedException ex) {
                 responseData.setData(ex.toJSON());
                 responseData.setHttpCode(401);

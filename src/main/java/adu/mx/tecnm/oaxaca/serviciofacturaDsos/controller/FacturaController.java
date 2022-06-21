@@ -61,7 +61,7 @@ public class FacturaController {
                 responseData.setHttpCode(400);
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
             }
-            if (factura.getFolioFiscal().isEmpty()) {
+            if (factura.getFolioFiscal().isEmpty() || factura.getFolioFiscal()==null) {
                 flag = false;
                 responseData.setMensaje("Falta folio fiscal");
                 responseData.setHttpCode(400);
@@ -80,7 +80,7 @@ public class FacturaController {
                 responseData.setMensaje("El id del pago no es válido");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
             }
-            if (factura.getRfcCliente().isEmpty()) {
+            if (factura.getRfcCliente().isEmpty() || factura.getRfcCliente()==null) {
                 flag = false;
                 responseData.setHttpCode(400);
                 responseData.setMensaje("Falta rfc del cliente");

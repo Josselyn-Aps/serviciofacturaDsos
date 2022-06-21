@@ -280,12 +280,6 @@ public class FacturaController {
             try {
             authentication.auth(request);
             boolean flag = true;
-            if (facturaService.getFactura(folio) == null) {
-                        valueResponse = ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
-                        responseData.setMensaje("No hay facturas con este folio: " + folio);
-                        responseData.setHttpCode(422);
-                        return valueResponse;
-            }
             if (factura.getFolio() == null) {
                 flag = false;
                 responseData.setMensaje("Falta el folio de la factura");

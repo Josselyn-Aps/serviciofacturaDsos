@@ -317,17 +317,17 @@ public class FacturaController {
                 responseData.setHttpCode(400);
                 responseData.setMensaje("Falta rfc del cliente");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-            } else if (flag) {
-                    if (factura.getFolioFiscal().length() != 36) {
-                        responseData.setHttpCode(422);
-                        responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
-                        valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                    }
-                    if (facturaService.getFactura(folio) == null) {
+            } 
+            if (facturaService.getFactura(folio) == null) {
                         valueResponse = ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
                         responseData.setMensaje("No hay facturas con este folio: " + folio);
                         responseData.setHttpCode(422);
                         return valueResponse;
+                    }else if (flag) {
+                    if (factura.getFolioFiscal().length() != 36) {
+                        responseData.setHttpCode(422);
+                        responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");
+                        valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                     }
                     if (factura.getFolioFiscal().length() == 36) {
                         Pattern pat = Pattern.compile("[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}");

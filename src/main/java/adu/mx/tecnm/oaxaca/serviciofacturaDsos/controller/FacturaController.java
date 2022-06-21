@@ -165,9 +165,10 @@ public class FacturaController {
             try{
                 authentication.auth(request);
                 if (facturaService.getFacturasCliente(rfcCliente) == null) {
-                valueResponse = ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
-                responseData.setMensaje("No hay clientes con este rfc:= " + rfcCliente);
-                responseData.setHttpCode(422);
+                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                    responseData.setMensaje("No hay clientes con este rfc: " + rfcCliente);
+                    responseData.setHttpCode(422); 
+                    return valueResponse;
             }else{
                 responseData.setData(facturaService.getFacturasCliente(rfcCliente));
                 responseData.setMensaje("OK");

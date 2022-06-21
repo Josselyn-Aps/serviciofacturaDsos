@@ -166,14 +166,14 @@ public class FacturaController {
                 authentication.auth(request);
                 if (facturaService.getFacturasCliente(rfcCliente) == null) {
                     valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                    responseData.setMensaje("No hay clientes con este rfc: " + rfcCliente);
+                    responseData.setMensaje("No hay facturas con este rfc: " + rfcCliente);
                     responseData.setHttpCode(422); 
                     return valueResponse;
-            }else{
-                responseData.setData(facturaService.getFacturasCliente(rfcCliente));
-                responseData.setMensaje("OK");
-                responseData.setHttpCode(200);
-                valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
+                }else{
+                    responseData.setData(facturaService.getFacturasCliente(rfcCliente));
+                    responseData.setMensaje("OK");
+                    responseData.setHttpCode(200);
+                    valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
                 }
             }catch (UnauthorizedException ex) {
                 responseData.setData(ex.toJSON());
@@ -197,10 +197,18 @@ public class FacturaController {
         CustomResponse responseData = new CustomResponse();
             try{
                 authentication.auth(request);
-                responseData.setData(facturaService.getFactura(folio));
-                responseData.setMensaje("OK");
-                responseData.setHttpCode(200);
-                valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
+                if (facturaService.getFactura(folio) == null) {
+                    valueResponse = ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+                    responseData.setMensaje("No hay facturas con este folio: " + folio);
+                    responseData.setHttpCode(422);
+                    return valueResponse;
+                }else{
+                    responseData.setData(facturaService.getFactura(folio));
+                    responseData.setMensaje("OK");
+                    responseData.setHttpCode(200);
+                    valueResponse = ResponseEntity.status(HttpStatus.OK).body(responseData);
+                    return valueResponse;
+                }
             }catch (UnauthorizedException ex) {
                 responseData.setData(ex.toJSON());
                 responseData.setHttpCode(401);

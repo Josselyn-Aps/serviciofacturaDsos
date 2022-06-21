@@ -21,4 +21,5 @@ public interface FacturaService {
    public FacturaModel getFacturaByFolioFiscal(String folio_fiscal);
    public void updateFactura(FacturaModel factura, Integer folio);
    public void deleteFactura(Integer folio);
+
 }

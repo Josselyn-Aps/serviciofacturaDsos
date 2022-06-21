@@ -40,7 +40,9 @@ public class FacturaController {
 
     @Autowired
     private Authentication authentication;
-
+    /**
+    * Registro de facturas
+    */
     @PostMapping("/")
     public ResponseEntity resgistrarFactura(@RequestBody FacturaModel factura, HttpServletRequest request) {
         ResponseEntity<CustomResponse> valueResponse = null;
@@ -131,7 +133,9 @@ public class FacturaController {
         }
         return valueResponse;
     }
-
+        /**
+        * Obtener todas las facturas registradas
+        */
         @GetMapping("/")
         public ResponseEntity getFacturas(HttpServletRequest request) {
         ResponseEntity valueResponse = null;   
@@ -156,7 +160,9 @@ public class FacturaController {
             }
             return valueResponse;
         }
-
+        /**
+        * Obtener todas las facturas registradas de un cliente en específico
+        */
         @GetMapping("/facturasCliente/{rfcCliente}")
         public ResponseEntity getFacturasCliente(@PathVariable String rfcCliente,HttpServletRequest request) {
         ResponseEntity valueResponse = null;   
@@ -190,7 +196,9 @@ public class FacturaController {
             return valueResponse;
             
         }
-
+        /**
+        * Obtener una factura de acuerdo al folio
+        */
         @GetMapping("/{folio}")
         public ResponseEntity getFactura(@PathVariable Integer folio,HttpServletRequest request) {
         ResponseEntity valueResponse = null;   
@@ -224,8 +232,9 @@ public class FacturaController {
             return valueResponse;
             
         }
-         
-
+         /**
+        * Obtener la factura registradas por folio fiscal
+        */
         @GetMapping("/foliofiscal/{folio_fiscal}")
         public ResponseEntity getFacturaF(@PathVariable String folio_fiscal,HttpServletRequest request) {
         ResponseEntity valueResponse = null;   
@@ -258,7 +267,9 @@ public class FacturaController {
             return valueResponse;
             
         }
-            
+        /**
+        * Actualizar una factura por folio
+        */
         @PutMapping("/{folio}")
         public ResponseEntity updateFactura(@RequestBody FacturaModel factura, 
         @PathVariable Integer folio, HttpServletRequest request) {
@@ -282,7 +293,7 @@ public class FacturaController {
                     }
                     if (facturaService.getFactura(factura.getFolio()) != null) {
                         responseData.setMensaje("El folio ya se encuentra registrado");
-                        //valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                        valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
                         responseData.setHttpCode(400);
                         return valueResponse;
                     }
@@ -314,14 +325,14 @@ public class FacturaController {
             }
         return valueResponse;
         }
-
+        /**
+        * Actualizar el estado de una factura por folio
+        */
         @PutMapping("/estado/{folio}")
         public ResponseEntity updateEstadoFactura(@RequestBody FacturaModel factura, 
         @PathVariable Integer folio,HttpServletRequest request) {
             ResponseEntity<CustomResponse> valueResponse = null;
             CustomResponse responseData = new CustomResponse();
-            /*
-            return valueResponse;*/
             try {
             authentication.auth(request);
             boolean flag = true;
@@ -411,7 +422,9 @@ public class FacturaController {
         }
         return valueResponse;
         }
-
+        /**
+        * Eliminar una factura
+        */
         @DeleteMapping("/{folio}")
         public CustomResponse deleteFactura(@PathVariable Integer folio) {
         CustomResponse customResponse = new CustomResponse();

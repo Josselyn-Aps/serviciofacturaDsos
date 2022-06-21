@@ -29,7 +29,9 @@ public class Authentication {
     private HttpRequest http;
 
     private final Integer HTTP_OK = 200, HTTP_UNAUTHORIZED = 401;
-
+    /**
+    * Verifica que el token se encuentre autorizado, si no, manda las excepciones
+    */
     public void auth(HttpServletRequest request) throws UnauthorizedException, ExternalMicroserviceException, IOException {
         Optional<String> tokenOptional = Optional.ofNullable(request.getHeader("Authorization"));
    
@@ -49,7 +51,9 @@ public class Authentication {
             }
        
     }
-
+    /**
+    * Valida la verificación de token en la solicitud
+    */
     private Map<String, Object> validateRequestTokenVerficacion(String token) throws IOException {
         Map<String, Object> basicRequest = http.createBasicDataRequest(TipoRespuestaParseEnum.MAP);
         basicRequest.put("url", AuthenticationConstans.URL_AUTH + token);

@@ -26,11 +26,13 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * @author herna
+ * @author JOSELYNE
  */
 @Component
 public class HttpRequest {
-
+    /**
+    * Verifica que el token se encuentre autorizado, si no, manda las excepciones
+    */
     public Map<String, Object> get(Map<String, Object> dataRequest) throws IOException {
         String url = dataRequest.get("url").toString();
         Map<String, String> headers = (Map<String, String>) dataRequest.get("headers");

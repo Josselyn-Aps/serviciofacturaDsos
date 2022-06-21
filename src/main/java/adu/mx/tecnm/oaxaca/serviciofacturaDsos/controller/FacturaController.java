@@ -69,9 +69,10 @@ public class FacturaController {
             }
             if (factura.getIdPago() == null) {
                 flag = false;
-                responseData.setHttpCode(400);
-                responseData.setMensaje("Falta id del pago");
+                responseData.setMensaje("Falta el id de pago");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                responseData.setHttpCode(400);
+                return valueResponse;
             }
             if (factura.getIdPago() == 0) {
                 flag = false;

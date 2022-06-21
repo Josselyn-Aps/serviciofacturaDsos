@@ -96,6 +96,7 @@ public class FacturaController {
                         responseData.setHttpCode(400);
                         responseData.setMensaje("El folio fiscal ya se encuentra registrado");
                         valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                        return valueResponse;
                     }
                     if (factura.getFolioFiscal().length() != 36) {
                         responseData.setHttpCode(422);

@@ -280,6 +280,12 @@ public class FacturaController {
             try {
             authentication.auth(request);
             boolean flag = true;
+            if (facturaService.getFactura(folio) == null) {
+                        valueResponse = ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+                        responseData.setMensaje("No hay facturas con este folio: " + folio);
+                        responseData.setHttpCode(422);
+                        return valueResponse;
+            }
             if (factura.getFolio() == null) {
                 flag = false;
                 responseData.setMensaje("Falta el folio de la factura");
@@ -318,12 +324,7 @@ public class FacturaController {
                 responseData.setMensaje("Falta rfc del cliente");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
             } 
-            if (facturaService.getFactura(folio) == null) {
-                        valueResponse = ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
-                        responseData.setMensaje("No hay facturas con este folio: " + folio);
-                        responseData.setHttpCode(422);
-                        return valueResponse;
-                    }else if (flag) {
+            else if (flag) {
                     if (factura.getFolioFiscal().length() != 36) {
                         responseData.setHttpCode(422);
                         responseData.setMensaje("El folio fiscal no cumple con el formato solicitado");

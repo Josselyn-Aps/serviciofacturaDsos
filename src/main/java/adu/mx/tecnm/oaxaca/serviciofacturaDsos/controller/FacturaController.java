@@ -158,8 +158,7 @@ public class FacturaController {
         }
 
         @GetMapping("/facturasCliente/{rfcCliente}")
-        public ResponseEntity getFacturasCliente(@PathVariable String rfcCliente,
-                HttpServletRequest request) {
+        public ResponseEntity getFacturasCliente(@PathVariable String rfcCliente,HttpServletRequest request) {
         ResponseEntity valueResponse = null;   
         CustomResponse responseData = new CustomResponse();
             try{

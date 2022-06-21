@@ -90,6 +90,7 @@ public class FacturaController {
                         responseData.setHttpCode(400);
                         responseData.setMensaje("El folio ya se encuentra registrado");
                         valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
+                        return valueResponse;
                     }
                     if (facturaService.getFacturaByFolioFiscal(factura.getFolioFiscal()) != null) {
                         responseData.setHttpCode(400);

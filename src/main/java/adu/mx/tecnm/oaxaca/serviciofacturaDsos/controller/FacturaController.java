@@ -86,40 +86,6 @@ public class FacturaController {
                 responseData.setMensaje("Falta rfc del cliente");
                 valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
             } else if (flag) {
-                if (facturaService.getFactura(factura.getFolio()) != null) {
-                    responseData.setHttpCode(400);
-                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                }
-                if (factura.getFolio()==0) {
-                    flag = false;
-                    responseData.setMensaje("El folio de la factura es inválido");
-                    responseData.setHttpCode(400);
-                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                }
-                if (factura.getFolioFiscal().isEmpty()) {
-                    flag = false;
-                    responseData.setMensaje("Falta folio fiscal");
-                    responseData.setHttpCode(400);
-                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                }
-                if (factura.getIdPago() == null) {
-                    flag = false;
-                    responseData.setHttpCode(400);
-                    responseData.setMensaje("Falta id del pago");
-                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                }
-                if (factura.getIdPago() == 0) {
-                    flag = false;
-                    responseData.setHttpCode(400);
-                    responseData.setMensaje("El id del pago no es válido");
-                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                }
-                if (factura.getRfcCliente().isEmpty()) {
-                    flag = false;
-                    responseData.setHttpCode(400);
-                    responseData.setMensaje("Falta rfc del cliente");
-                    valueResponse = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(responseData);
-                } else if (flag) {
                     if (facturaService.getFactura(factura.getFolio()) != null) {
                         responseData.setHttpCode(400);
                         responseData.setMensaje("El folio ya se encuentra registrado");
@@ -148,7 +114,7 @@ public class FacturaController {
                         }
                     }
                 }
-            }
+            return valueResponse;
         }catch (UnauthorizedException ex) {
                 responseData.setData(ex.toJSON());
                 responseData.setHttpCode(401);
